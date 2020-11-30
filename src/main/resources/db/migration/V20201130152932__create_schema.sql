@@ -84,5 +84,5 @@ create table item_tag
 
 create index item_tag_item_id_index
     on item_tag (item_id);
-create index item_tag_item_id_index
+create index item_tag_item_tag_index
     on item_tag (tag);
