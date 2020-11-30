@@ -1,0 +1,14 @@
+version: '3'
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - 5432:5432
+    volumes:
+      - box-organization-db-data:/var/lib/postgresql/data/
+
+volumes:
+  box-organization-db-data:
