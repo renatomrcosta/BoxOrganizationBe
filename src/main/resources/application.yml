@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: box-organization-be
+  flyway:
+    enabled: false
+    baseline-on-migrate: true
+    url: ${DB_URL}
+    user: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
