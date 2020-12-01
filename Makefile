@@ -1,7 +1,7 @@
-DB_NAME = "bot-db"
-DB_HOST = "localhost"
-DB_USER = "postgres"
-DB_PASSWORD = "postgres"
+DB_NAME=bot-db
+DB_HOST=localhost
+DB_USER=postgres
+DB_PASSWORD=postgres
 
 export DB_NAME
 export DB_HOST
