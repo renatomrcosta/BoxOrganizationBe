@@ -4,10 +4,7 @@ import java.util.UUID
 
 data class Item(
     val id: UUID,
+    val ownerId: UUID,
+    val boxId: UUID?,
     val name: String,
-    val tags: List<String>
-) {
-    // val box: Box? by lazy { null }
-
-
-}
+)

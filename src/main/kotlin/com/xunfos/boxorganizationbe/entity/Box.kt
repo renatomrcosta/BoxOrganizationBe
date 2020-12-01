@@ -6,8 +6,5 @@ data class Box(
     val id: UUID,
     val name: String,
     val qrCode: String?,
-    val ownerId: String
-) {
-    // val items: List<Item> by lazy { emptyList() }
-    // val images: List<Image> by lazy { emptyList() }
-}
+    val ownerId: UUID
+)
