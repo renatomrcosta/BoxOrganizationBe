@@ -12,7 +12,7 @@ import java.util.UUID
 @Service
 class BoxService(
     private val boxRepository: BoxRepository,
-    private val itemService: ItemService,
+    private val objectService: ObjectService,
 ) {
     suspend fun getAllBoxesByUserId(userId: UUID): Flow<BoxDTO> =
         boxRepository
@@ -20,12 +20,12 @@ class BoxService(
             .map { it.toDTO() }
 
     suspend fun Box.toDTO(): BoxDTO {
-        val items = itemService.findAllByBoxId(this.id)
+        val items = objectService.findAllByBoxId(this.id)
         return BoxDTO(
             id = this.id,
             name = this.name,
             qrCode = this.qrCode,
-            items = items.toList()
+            items = items.toList(),
         )
     }
 }

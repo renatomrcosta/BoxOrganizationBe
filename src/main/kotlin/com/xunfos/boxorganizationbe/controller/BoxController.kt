@@ -14,7 +14,7 @@ class BoxController(
     @GetMapping("/box")
     suspend fun list(): Flow<BoxDTO> {
         // TODO - Authorize by userId
-        val userId = UUID.fromString("528d9c30-7c42-4e73-bdd1-f3869f233dca")
+        val userId = UUID.fromString("2fbd2774-06ec-4de7-b657-9617bd9971c5")
         return boxService.getAllBoxesByUserId(userId = userId)
     }
 }
