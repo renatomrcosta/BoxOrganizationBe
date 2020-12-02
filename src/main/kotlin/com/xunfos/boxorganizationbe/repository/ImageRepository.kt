@@ -7,22 +7,10 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import java.util.UUID
 
 interface ImageRepository : ReactiveCrudRepository<Image, UUID> {
-    @Query(IMAGE_BY_BOX_ID_QUERY)
-    suspend fun findAllByBoxId(boxId: UUID): Flow<Image>
-
     @Query(IMAGE_BY_ITEM_ID_QUERY)
     suspend fun findAllByItemId(itemId: UUID): Flow<Image>
 
     companion object {
-        private const val IMAGE_BY_BOX_ID_QUERY = """
-            SELECT
-                img.id, img.url
-            FROM
-                image img
-            INNER JOIN box_image bimg
-                ON img.id = bimg.image_id
-            WHERE bimg.box_id = :boxId
-        """
         private const val IMAGE_BY_ITEM_ID_QUERY = """
             SELECT
                 img.id, img.url

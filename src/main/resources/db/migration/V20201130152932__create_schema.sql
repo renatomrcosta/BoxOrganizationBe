@@ -11,37 +11,27 @@ create table "user"
 create unique index user_firebase_uid_uindex
 	on "user" (firebase_uid);
 
-create table box
-(
-	id uuid
-		constraint box_pk
-			primary key,
-	owner_id UUID NOT NULL
-        constraint box_user_id_fk
-            references "user"(id),
-	name TEXT,
-	qr_code text
-);
+create type ItemType as enum ('Box', 'Object');
 
 create table item
 (
 	id uuid
 		constraint item_pk
 			primary key,
-    owner_id UUID NOT NULL
-        constraint box_user_id_fk
+    name TEXT,
+    type ItemType NOT NULL,
+	user_id UUID NOT NULL
+        constraint item_user_id_fk
             references "user"(id),
-    box_id uuid
-		constraint item_box_id_fk
-			references box (id),
-	name text
+	qr_code text NULL,
+	container_item_id uuid null
+        constraint item_container_id_fk
+            references item(id)
 );
+
 
 create index item_id_index on item (id);
 create index item_name_index on item (name);
-
-create index box_id_index on box (id);
-create index box_name_index on box (name);
 
 create table image
 (
@@ -51,15 +41,6 @@ create table image
 	url TEXT
 );
 
-create table box_image
-(
-    box_id uuid
-        constraint box_image_box_id_fk
-            references box (id),
-    image_id uuid
-        constraint box_image_image_id_fk
-            references image (id)
-);
 
 create table item_image
 (
@@ -71,8 +52,7 @@ create table item_image
             references image (id)
 );
 
-create index box_image_box_id_index on box_image    (box_id);
-create index item_image_item_id_index on item_image    (item_id);
+create index item_image_item_id_index on item_image(item_id);
 
 create table item_tag
 (

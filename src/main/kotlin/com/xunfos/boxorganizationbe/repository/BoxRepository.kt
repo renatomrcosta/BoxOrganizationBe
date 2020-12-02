@@ -9,6 +9,6 @@ import java.util.UUID
 
 @Repository
 interface BoxRepository : ReactiveCrudRepository<Box, UUID> {
-    @Query("SELECT * from box WHERE owner_id = :userId")
+    @Query("SELECT * from item WHERE user_id = :userId AND type = 'Box'")
     suspend fun findAllByUserId(userId: UUID): Flow<Box>
 }
