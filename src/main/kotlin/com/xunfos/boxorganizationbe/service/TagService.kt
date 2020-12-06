@@ -17,7 +17,7 @@ class TagService(
             .map { it.toDTO() }
 
     fun Tag.toDTO(): TagDTO = TagDTO(
-        id = this.id, itemId = this.itemId, value = this.tag
+        id = this.id, value = this.tag
     )
 }
 
