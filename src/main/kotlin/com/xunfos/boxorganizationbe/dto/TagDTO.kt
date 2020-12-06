@@ -2,7 +2,8 @@ package com.xunfos.boxorganizationbe.dto
 
 import java.util.UUID
 
-data class TagDTO(
+data class TagDTO (
+    val id: UUID,
     val itemId: UUID,
     val value: String,
 )

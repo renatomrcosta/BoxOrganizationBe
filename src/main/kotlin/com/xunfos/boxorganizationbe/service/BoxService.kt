@@ -22,16 +22,6 @@ class BoxService(
             .findAllByUserId(userId)
             .map { it.toDTO() }
 
-    suspend fun Box.toDTO(): BoxDTO {
-        val items = objectService.findAllByBoxId(this.id)
-        return BoxDTO(
-            id = this.id,
-            name = this.name,
-            qrCode = this.qrCode,
-            items = items.toList(),
-        )
-    }
-
     suspend fun addBox(userId: UUID, dto: BoxDTO): BoxDTO =
         boxRepository.save(
             Box(
@@ -58,6 +48,16 @@ class BoxService(
         val id = dto.id ?: error("invalid null uuid for update")
         val box = boxRepository.findById(id).awaitSingle()
         boxRepository.delete(box).awaitSingleOrNull()
+    }
+
+    suspend fun Box.toDTO(): BoxDTO {
+        val items = objectService.findAllByBoxId(this.id)
+        return BoxDTO(
+            id = this.id,
+            name = this.name,
+            qrCode = this.qrCode,
+            objects = items.toList(),
+        )
     }
 }
 

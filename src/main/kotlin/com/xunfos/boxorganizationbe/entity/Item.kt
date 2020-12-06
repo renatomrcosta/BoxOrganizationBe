@@ -19,9 +19,9 @@ data class Object(
     @JvmField @Id override val id: UUID,
     override val userId: UUID,
     override val name: String,
-    override val qrCode: String?,
+    override val qrCode: String? = null,
     override val type: ItemType = ItemType.Object,
-    val containerItemId: UUID,
+    val containerItemId: UUID?,
 ) : Item(), Persistable<UUID> {
     @JvmField
     @Transient

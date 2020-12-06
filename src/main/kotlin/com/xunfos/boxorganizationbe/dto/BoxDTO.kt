@@ -6,5 +6,5 @@ data class BoxDTO(
     val id: UUID? = null,
     val name: String,
     val qrCode: String?,
-    val items: List<ItemDTO>,
+    val objects: List<ObjectDTO>,
 )
