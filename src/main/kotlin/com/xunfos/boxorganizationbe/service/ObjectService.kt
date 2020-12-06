@@ -37,7 +37,7 @@ class ObjectService(
             ).apply { isNew = true }
         ).awaitSingle().toDTO()
 
-    suspend fun updateObjectEntity(
+    suspend fun updateObject(
         objectDTO: ObjectDTO,
         userId: UUID,
         containerId: UUID? = null,
@@ -68,4 +68,8 @@ class ObjectService(
             tags = tags.toList()
         )
     }
+
+    suspend fun saveObject(objectDto: ObjectDTO, userId: UUID, containerId: UUID) =
+        if (objectDto.id == null) addObject(objectDto, userId, containerId)
+        else updateObject(objectDto, userId, containerId)
 }
