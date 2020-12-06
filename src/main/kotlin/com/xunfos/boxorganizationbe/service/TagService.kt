@@ -6,8 +6,10 @@ import com.xunfos.boxorganizationbe.repository.TagRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
+@Transactional
 @Service
 class TagService(
     private val tagRepository: TagRepository,

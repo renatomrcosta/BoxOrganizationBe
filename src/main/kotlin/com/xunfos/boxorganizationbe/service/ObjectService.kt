@@ -8,9 +8,11 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.reactive.awaitSingleOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 import com.xunfos.boxorganizationbe.entity.Object as ObjectEntity
 
+@Transactional
 @Service
 class ObjectService(
     private val objectRepository: ObjectRepository,
