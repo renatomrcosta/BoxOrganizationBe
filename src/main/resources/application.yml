@@ -11,3 +11,9 @@ spring:
     url: r2dbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}
     username: ${DB_USER:postgres}
     password: ${DB_PASSWORD:postgres}
+  security:
+    user:
+      name: ${APPLICATION_USERNAME}
+      password: ${APPLICATION_PASSWORD}
+user:
+  id: 2fbd2774-06ec-4de7-b657-9617bd9971c5
