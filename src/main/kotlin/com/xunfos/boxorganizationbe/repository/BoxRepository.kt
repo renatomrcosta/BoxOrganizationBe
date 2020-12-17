@@ -14,4 +14,7 @@ interface BoxRepository : ReactiveCrudRepository<Box, UUID> {
 
     @Query("SELECT * from item WHERE user_id = :userId AND id = :id AND type = 'Box'")
     suspend fun getByUserIdAndId(userId: UUID, id: UUID): Box
+
+    @Query("SELECT * from item WHERE user_id = :userId AND type = 'Box' AND name ILIKE CONCAT('%', :query,'%')")
+    suspend fun find(userId: UUID, query: String): Flow<Box>
 }

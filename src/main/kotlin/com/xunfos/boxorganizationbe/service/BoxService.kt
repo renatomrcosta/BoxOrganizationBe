@@ -29,6 +29,9 @@ class BoxService(
             .findAllByUserId(userId)
             .map { it.toDTO() }
 
+    suspend fun find(userId: UUID, query: String): Flow<BoxDTO> =
+        boxRepository.find(userId, query).map { it.toDTO() }
+
     suspend fun addBox(userId: UUID, dto: BoxDTO): BoxDTO = coroutineScope {
         val box = boxRepository.save(
             Box(

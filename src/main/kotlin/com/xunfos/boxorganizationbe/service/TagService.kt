@@ -19,6 +19,9 @@ class TagService(
         tagRepository.findAllByItemId(itemId)
             .map { it.toDTO() }
 
+    suspend fun findItemIds(query: String): Flow<UUID> =
+        tagRepository.find(query).map { it.itemId }
+
     fun Tag.toDTO(): TagDTO = TagDTO(
         id = this.id, value = this.tag
     )

@@ -15,4 +15,7 @@ interface ObjectRepository : ReactiveCrudRepository<Object, UUID> {
 
     @Query("SELECT * FROM item where user_id = :userId AND id = :id AND type = 'Object'")
     suspend fun findByIdAndUserId(id: UUID, userId: UUID): Object
+
+    @Query("SELECT * from item WHERE user_id = :userId AND type = 'Object' AND name ILIKE CONCAT('%', :query,'%')")
+    suspend fun find(userId: UUID, query: String): Flow<Object>
 }
