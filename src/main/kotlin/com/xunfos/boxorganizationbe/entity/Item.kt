@@ -1,5 +1,9 @@
 package com.xunfos.boxorganizationbe.entity
 
+import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.Transient
+import org.springframework.data.domain.Persistable
+import org.springframework.data.relational.core.mapping.Table
 import java.util.UUID
 
 sealed class Item {
@@ -7,22 +11,38 @@ sealed class Item {
     abstract val userId: UUID
     abstract val name: String
     abstract val qrCode: String?
-    abstract val itemType: ItemType
+    abstract val type: ItemType
 }
 
+@Table("item")
 data class Object(
-    override val id: UUID,
+    @JvmField @Id override val id: UUID,
     override val userId: UUID,
     override val name: String,
-    override val qrCode: String?,
-    override val itemType: ItemType = ItemType.Object,
-    val containerItemId: UUID,
-) : Item()
+    override val qrCode: String? = null,
+    override val type: ItemType = ItemType.Object,
+    val containerItemId: UUID?,
+) : Item(), Persistable<UUID> {
+    @JvmField
+    @Transient
+    var isNew: Boolean = false
 
+    override fun getId(): UUID = id
+    override fun isNew() = isNew
+}
+
+@Table("item")
 data class Box(
-    override val id: UUID,
+    @JvmField @Id override val id: UUID,
     override val userId: UUID,
     override val name: String,
     override val qrCode: String?,
-    override val itemType: ItemType = ItemType.Box,
-) : Item()
+    override val type: ItemType = ItemType.Box,
+) : Item(), Persistable<UUID> {
+    @JvmField
+    @Transient
+    var isNew: Boolean = false
+
+    override fun getId(): UUID = id
+    override fun isNew() = isNew
+}
