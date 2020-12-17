@@ -1,6 +1,6 @@
 package com.xunfos.boxorganizationbe.service
 
-import com.xunfos.boxorganizationbe.controller.SearchDTO
+import com.xunfos.boxorganizationbe.dto.SearchDTO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.toList
