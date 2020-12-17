@@ -13,7 +13,7 @@ spring:
     password: ${DB_PASSWORD:postgres}
   security:
     user:
-      name: ${APPLICATION_USERNAME}
-      password: ${APPLICATION_PASSWORD}
+      name: ${APPLICATION_USERNAME:user}
+      password: ${APPLICATION_PASSWORD:user}
 user:
   id: 2fbd2774-06ec-4de7-b657-9617bd9971c5

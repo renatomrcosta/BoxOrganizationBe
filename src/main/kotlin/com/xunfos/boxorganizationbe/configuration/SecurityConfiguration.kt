@@ -15,5 +15,5 @@ class SecurityConfiguration {
         http.authorizeExchange()
             .pathMatchers("/actuator/*").permitAll()
             .anyExchange().authenticated()
-            .and().build()
+            .and().httpBasic().and().build()
 }
