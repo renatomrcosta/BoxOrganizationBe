@@ -23,7 +23,23 @@ class ObjectService(
             .map { it.toDTO() }
     }
 
-    suspend fun addObject(
+    suspend fun getAllObjectsByUserId(userId: UUID): Flow<ObjectDTO> =
+        objectRepository.findAllByUserId(userId).map { it.toDTO() }
+
+    suspend fun getById(userId: UUID, id: UUID): ObjectDTO =
+        objectRepository.findByIdAndUserId(userId = userId, id = id).toDTO()
+
+    suspend fun removeObject(objectDTO: ObjectDTO) {
+        val id = objectDTO.id ?: error("invalid object ID to update")
+        val obj = objectRepository.findById(id).awaitSingle()
+        objectRepository.delete(obj).awaitSingleOrNull()
+    }
+
+    suspend fun saveObject(objectDTO: ObjectDTO, userId: UUID, containerId: UUID?) =
+        if (objectDTO.id == null) addObject(objectDTO, userId, containerId)
+        else updateObject(objectDTO, userId, containerId)
+
+    private suspend fun addObject(
         objectDTO: ObjectDTO,
         userId: UUID,
         containerId: UUID? = null,
@@ -37,7 +53,7 @@ class ObjectService(
             ).apply { isNew = true }
         ).awaitSingle().toDTO()
 
-    suspend fun updateObject(
+    private suspend fun updateObject(
         objectDTO: ObjectDTO,
         userId: UUID,
         containerId: UUID? = null,
@@ -54,12 +70,6 @@ class ObjectService(
         ).awaitSingle().toDTO()
     }
 
-    suspend fun removeObject(objectDTO: ObjectDTO) {
-        val id = objectDTO.id ?: error("invalid object ID to update")
-        val obj = objectRepository.findById(id).awaitSingle()
-        objectRepository.delete(obj).awaitSingleOrNull()
-    }
-
     suspend fun ObjectEntity.toDTO(): ObjectDTO {
         val tags = tagService.findAllByItemId(this.id)
         return ObjectDTO(
@@ -68,8 +78,4 @@ class ObjectService(
             tags = tags.toList()
         )
     }
-
-    suspend fun saveObject(objectDto: ObjectDTO, userId: UUID, containerId: UUID) =
-        if (objectDto.id == null) addObject(objectDto, userId, containerId)
-        else updateObject(objectDto, userId, containerId)
 }

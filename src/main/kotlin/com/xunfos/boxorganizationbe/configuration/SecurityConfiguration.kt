@@ -14,6 +14,7 @@ class SecurityConfiguration {
     ): SecurityWebFilterChain =
         http.authorizeExchange()
             .pathMatchers("/actuator/*").permitAll()
-            .anyExchange().authenticated()
-            .and().httpBasic().and().build()
+            .anyExchange().authenticated().and().httpBasic()
+            .and().csrf().disable()
+            .build()
 }

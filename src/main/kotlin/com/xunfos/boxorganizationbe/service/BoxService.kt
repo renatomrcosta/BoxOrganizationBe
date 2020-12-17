@@ -73,7 +73,7 @@ class BoxService(
         box: Box,
     ) = coroutineScope {
         dto.objects.forEach {
-            launch { objectService.addObject(it, userId, box.id) }
+            launch { objectService.saveObject(it, userId, box.id) }
         }
     }
 
