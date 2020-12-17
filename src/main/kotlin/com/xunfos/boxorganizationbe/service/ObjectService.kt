@@ -2,9 +2,11 @@ package com.xunfos.boxorganizationbe.service
 
 import com.xunfos.boxorganizationbe.dto.ObjectDTO
 import com.xunfos.boxorganizationbe.repository.ObjectRepository
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.awaitSingle
 import kotlinx.coroutines.reactive.awaitSingleOrNull
 import org.springframework.stereotype.Service
@@ -43,15 +45,26 @@ class ObjectService(
         objectDTO: ObjectDTO,
         userId: UUID,
         containerId: UUID? = null,
-    ) =
-        objectRepository.save(
+    ): ObjectDTO {
+        val obj = objectRepository.save(
             ObjectEntity(
                 id = UUID.randomUUID(),
                 userId = userId,
                 name = objectDTO.name,
                 containerItemId = containerId
             ).apply { isNew = true }
-        ).awaitSingle().toDTO()
+        ).awaitSingle()
+
+        handleItems(obj, objectDTO)
+
+        return obj.toDTO()
+    }
+
+    private suspend fun handleItems(obj: ObjectEntity, dto: ObjectDTO) = coroutineScope {
+        dto.tags.forEach {
+            launch { tagService.saveTag(it, obj.id) }
+        }
+    }
 
     private suspend fun updateObject(
         objectDTO: ObjectDTO,
@@ -66,7 +79,7 @@ class ObjectService(
                 userId = userId,
                 name = objectDTO.name,
                 containerItemId = containerId,
-            ).apply { isNew = true }
+            )
         ).awaitSingle().toDTO()
     }
 

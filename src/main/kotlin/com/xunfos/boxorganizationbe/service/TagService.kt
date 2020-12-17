@@ -5,6 +5,7 @@ import com.xunfos.boxorganizationbe.entity.Tag
 import com.xunfos.boxorganizationbe.repository.TagRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
@@ -21,5 +22,27 @@ class TagService(
     fun Tag.toDTO(): TagDTO = TagDTO(
         id = this.id, value = this.tag
     )
+
+    private suspend fun addTag(dto: TagDTO, objectId: UUID): TagDTO =
+        tagRepository.save(
+            Tag(
+                id = UUID.randomUUID(),
+                itemId = objectId,
+                tag = dto.value
+            ).apply { isNew = true }
+        ).awaitSingle().toDTO()
+
+    private suspend fun updateTag(dto: TagDTO, objectId: UUID): TagDTO =
+        tagRepository.save(
+            Tag(
+                id = dto.id ?: error("invalid id for dto $dto"),
+                itemId = objectId,
+                tag = dto.value
+            )
+        ).awaitSingle().toDTO()
+
+    suspend fun saveTag(dto: TagDTO, objectId: UUID): TagDTO =
+        if (dto.id == null) addTag(dto, objectId)
+        else updateTag(dto, objectId)
 }
 
