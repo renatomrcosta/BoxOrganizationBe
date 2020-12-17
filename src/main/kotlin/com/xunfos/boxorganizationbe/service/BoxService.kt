@@ -21,6 +21,9 @@ class BoxService(
     private val boxRepository: BoxRepository,
     private val objectService: ObjectService,
 ) {
+    suspend fun getById(userId: UUID, id: UUID): BoxDTO =
+        boxRepository.getByUserIdAndId(userId = userId, id = id).toDTO()
+
     suspend fun getAllBoxesByUserId(userId: UUID): Flow<BoxDTO> =
         boxRepository
             .findAllByUserId(userId)
@@ -36,9 +39,7 @@ class BoxService(
             ).apply { isNew = true }
         ).awaitFirst()
 
-        dto.objects.forEach {
-            launch { objectService.addObject(it, userId, box.id) }
-        }
+        handleItems(dto, userId, box)
 
         box.toDTO()
     }
@@ -54,9 +55,7 @@ class BoxService(
             )
         ).awaitFirst()
 
-        dto.objects.forEach {
-            launch { objectService.saveObject(it, userId, box.id) }
-        }
+        handleItems(dto, userId, box)
 
         box.toDTO()
     }
@@ -66,6 +65,16 @@ class BoxService(
         val box = boxRepository.findById(id).awaitSingle()
         // TODO add a cascade to the DB itself?
         boxRepository.delete(box).awaitSingleOrNull()
+    }
+
+    private suspend fun handleItems(
+        dto: BoxDTO,
+        userId: UUID,
+        box: Box,
+    ) = coroutineScope {
+        dto.objects.forEach {
+            launch { objectService.addObject(it, userId, box.id) }
+        }
     }
 
     suspend fun Box.toDTO(): BoxDTO {
