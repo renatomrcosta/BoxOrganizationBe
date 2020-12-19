@@ -28,3 +28,11 @@ build:
 .PHONY: test
 test:
 	./gradlew check
+
+.PHONY: deploy
+deploy:
+	echo "DEPLOY"
+
+.PHONY: push-image
+push-image:
+	echo "push-image"
