@@ -1,5 +1,5 @@
 SERVICE_IMAGE=bot
-SERVICE_TAG=1.0.0
+SERVICE_TAG:=$(shell git log -1 --pretty=%h)
 
 DB_NAME=bot-db
 DB_HOST=localhost
@@ -24,3 +24,7 @@ run-dockerized: build
 .PHONY: build
 build:
 	./gradlew jibDockerBuild --image ${SERVICE_IMAGE}:${SERVICE_TAG}
+
+.PHONY: test
+test:
+	./gradlew check
