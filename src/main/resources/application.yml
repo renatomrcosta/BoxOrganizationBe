@@ -17,3 +17,5 @@ spring:
       password: ${APPLICATION_PASSWORD:user}
 user:
   id: 2fbd2774-06ec-4de7-b657-9617bd9971c5
+server:
+  port: 80
