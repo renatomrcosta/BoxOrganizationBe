@@ -6,6 +6,8 @@ plugins {
     kotlin("jvm") version "1.4.10"
     kotlin("plugin.spring") version "1.4.10"
 
+    id("org.flywaydb.flyway") version "7.5.0"
+
     id("com.google.cloud.tools.jib") version "2.7.0"
 }
 
@@ -74,3 +76,14 @@ jib {
         ports = listOf("80", "8080")
     }
 }
+
+flyway {
+    url = "jdbc:postgresql://${env("DB_HOST")}:${env("DB_PORT")}/${env("DB_NAME")}"
+    user = env("DB_USER")
+    password = env("DB_PASS")
+    locations = arrayOf("db/migration")
+    baselineOnMigrate = true
+}
+
+fun env(variableName: String) = envOrNull(variableName) ?: error("Environment variable $variableName does not exist")
+fun envOrNull(variableName: String) = System.getenv(variableName) ?: null
